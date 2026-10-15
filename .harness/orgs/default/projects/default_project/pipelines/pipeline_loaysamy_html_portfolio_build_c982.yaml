@@ -1,0 +1,40 @@
+pipeline:
+  id: pipeline_loaysamy_html_portfolio_build_c982
+  name: pipeline_loaysamy_html_portfolio_build_c982
+  stages:
+    - name: Build
+      clone:
+        enabled: true
+      runtime:
+        cloud: {}
+      cache:
+        enabled: true
+      steps:
+        - name: Validate HTML Files
+          id: validate_html
+          run:
+            shell: bash
+            script: |-
+              echo "Validating HTML portfolio files..."
+
+              # Check that required HTML files exist
+              for file in index.html solution.html public/about.html public/contact.html public/movie-ranking.html public/birthday-invite.html; do
+                if [ -f "$file" ]; then
+                  echo "Found: $file"
+                else
+                  echo "Missing: $file"
+                  exit 1
+                fi
+              done
+
+              # Check that asset directories exist
+              if [ -d "assets/images" ]; then
+                echo "Found: assets/images directory"
+              else
+                echo "Missing: assets/images directory"
+                exit 1
+              fi
+
+              echo "All HTML files validated successfully!"
+  tags:
+    onboarding: "true"
